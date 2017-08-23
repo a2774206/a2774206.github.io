@@ -10,7 +10,7 @@
     <script type="text/javascript">
     	
    		document.addEventListener('plusready', function(){
-   			//console.log("ËùÓĞplus api¶¼Ó¦¸ÃÔÚ´ËÊÂ¼ş·¢Éúºóµ÷ÓÃ£¬·ñÔò»á³öÏÖplus is undefined¡£"
+   			//console.log("æ‰€æœ‰plus apiéƒ½åº”è¯¥åœ¨æ­¤äº‹ä»¶å‘ç”Ÿåè°ƒç”¨ï¼Œå¦åˆ™ä¼šå‡ºç°plus is undefinedã€‚"
    			
    		});
    		
@@ -32,11 +32,11 @@
 </head>
 <body>
 	<div id="app">
-		<center style="margin: 10px auto;">¸üĞÂ{{num}}´Î||Êı¾İ¸üĞÂÊ±¼ä£º{{getLocalTime(obj.time)}}</center>
+		<center style="margin: 10px auto;">æ›´æ–°{{num}}æ¬¡||æ•°æ®æ›´æ–°æ—¶é—´ï¼š{{getLocalTime(obj.time)}}</center>
 		<table style="float: left;" class="table table-striped">
 			
 			<center style="margin: 15px 0;"><input v-model="size" />  {{size*sum}}</center>
-			<tr><th>ĞòÁĞ</th><th>¹ºÂò¼Û¸ñ</th><th>ÊıÁ¿</th></tr>
+			<tr><th>åºåˆ—</th><th>è´­ä¹°ä»·æ ¼</th><th>æ•°é‡</th></tr>
 			
 			<tr v-for="(value, key) in obj.buy">
 				<td>{{key+1}}</td><td>0.{{value.price}}</td><td>{{value.am}}</td>
@@ -45,7 +45,7 @@
 			
 		</table>
 		<table style="float: left;" class="table table-striped">
-			<tr><th>ĞòÁĞ</th><th>Âô³ö¼Û¸ñ</th><th>ÊıÁ¿</th></tr>
+			<tr><th>åºåˆ—</th><th>å–å‡ºä»·æ ¼</th><th>æ•°é‡</th></tr>
 			<tr v-for="(value, key) in obj.sell">
 				<td>{{key+1}}</td><td>0.{{value.price}}</td><td>{{value.am}}</td>
 			</tr>
@@ -65,7 +65,7 @@
 			}
 			setInterval(function(){
 				loadxml()
-				//Á½ÃëÉè¸üĞÂÒ»´Îobj
+				//ä¸¤ç§’è®¾æ›´æ–°ä¸€æ¬¡obj
 				vm.$data.obj=str;
 				vm.$data.sum=str.sell[0].price/1000
 			},2000)
@@ -85,8 +85,8 @@
 				},
 				watch:{
 					obj:function(){
-						//¼à²âobjÊÇ·ñ±ä»¯
-						console.log("¸üĞÂ´ÎÊı:"+this.num++)
+						//ç›‘æµ‹objæ˜¯å¦å˜åŒ–
+						console.log("æ›´æ–°æ¬¡æ•°:"+this.num++)
 					}
 				}
 			})
@@ -95,4 +95,4 @@
 	
 	</script>
 </body>
-</html>
+</html> 
