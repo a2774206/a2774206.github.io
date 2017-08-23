@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title></title>
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/vue/2.3.4/vue.js" ></script>
+    <script type="text/javascript">
+    	
+   		document.addEventListener('plusready', function(){
+   			//console.log("&#x6240;&#x6709;plus api&#x90FD;&#x5E94;&#x8BE5;&#x5728;&#x6B64;&#x4E8B;&#x4EF6;&#x53D1;&#x751F;&#x540E;&#x8C03;&#x7528;&#xFF0C;&#x5426;&#x5219;&#x4F1A;&#x51FA;&#x73B0;plus is undefined&#x3002;"
+   			
+   		});
+   		
+    </script>
+    <style>
+    	html{
+    		font-size: 62.5%;
+    	}
+    	body{
+    		font-size: 1.6rem;
+    	}
+    	table {
+    		text-align: center;
+    	}
+    	th{
+    		text-align: center;
+    	}
+    </style>
+</head>
+<body>
+	<div id="app">
+		<center style="margin: 10px auto;">&#x66F4;&#x65B0;{{num}}&#x6B21;||&#x6570;&#x636E;&#x66F4;&#x65B0;&#x65F6;&#x95F4;&#xFF1A;{{getLocalTime(obj.time)}}</center>
+		<table style="float: left;" class="table table-striped">
+			
+			<center style="margin: 15px 0;"><input v-model="size" />  {{size*sum}}</center>
+			<tr><th>&#x5E8F;&#x5217;</th><th>&#x8D2D;&#x4E70;&#x4EF7;&#x683C;</th><th>&#x6570;&#x91CF;</th></tr>
+			
+			<tr v-for="(value, key) in obj.buy">
+				<td>{{key+1}}</td><td>0.{{value.price}}</td><td>{{value.am}}</td>
+			</tr>
+
+			
+		</table>
+		<table style="float: left;" class="table table-striped">
+			<tr><th>&#x5E8F;&#x5217;</th><th>&#x5356;&#x51FA;&#x4EF7;&#x683C;</th><th>&#x6570;&#x91CF;</th></tr>
+			<tr v-for="(value, key) in obj.sell">
+				<td>{{key+1}}</td><td>0.{{value.price}}</td><td>{{value.am}}</td>
+			</tr>
+			
+			
+		</table>
+	</div>
+	<script>
+		$(function(){
+			var str = '';
+			loadxml();
+			function loadxml(){
+				$.getJSON('https://zc.bityuan.com/tickdata/tick.php?callback=?',function(mes){
+					str = JSON.parse(mes.marketdata);
+					//console.log(JSON.parse(mes.marketdata));
+				});
+			}
+			setInterval(function(){
+				loadxml()
+				//&#x4E24;&#x79D2;&#x8BBE;&#x66F4;&#x65B0;&#x4E00;&#x6B21;obj
+				vm.$data.obj=str;
+				vm.$data.sum=str.sell[0].price/1000
+			},2000)
+			
+			var vm = new Vue({
+				el:"#app",
+				data:{
+					num:0,
+					obj:'',
+					sum:'',
+					size:72346
+				},
+				methods:{
+					getLocalTime:function(nS){     
+					   return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');     
+					}  
+				},
+				watch:{
+					obj:function(){
+						//&#x76D1;&#x6D4B;obj&#x662F;&#x5426;&#x53D8;&#x5316;
+						console.log("&#x66F4;&#x65B0;&#x6B21;&#x6570;:"+this.num++)
+					}
+				}
+			})
+			
+		})
+	
+	</script>
+</body>
+</html> 
