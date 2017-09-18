@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title></title>
+		<link href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
+		<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+		<script type="text/javascript" src="https://cdn.bootcss.com/vue/2.3.4/vue.js"></script>
+		<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+		<!-- 引入组件库 -->
+
+		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+		<script type="text/javascript">
+			document.addEventListener('plusready', function() {
+				//console.log("所有plus api都应该在此事件发生后调用，否则会出现plus is undefined。"
+
+			});
+		</script>
+		<style>
+			html {
+				font-size: 100px;
+			}
+			
+			body {
+				font-size: 0.16rem;
+			}
+			
+			#app {
+				overflow: hidden;
+			}
+			
+			h1 {
+				margin-bottom: 0.05rem;
+			}
+			.mint-header{
+				height: 0.5rem;
+			}
+			table {
+				text-align: center;
+			}
+			
+			.table td,
+			.table th {
+				padding: 0.075rem
+			}
+			
+			.table {
+				margin-bottom: 0.1rem;
+			}
+			
+			label {
+				display: inline-block;
+				margin-bottom: 0.05rem;
+			}
+			
+			th {
+				text-align: center;
+			}
+			
+			.mint-header {
+				text-align: center !important;
+			}
+			
+			.mint-switch {
+				font-size: 14px;
+				margin-top: 20px;
+				margin-left: 10px;
+			}
+			td{
+				width: 5%;
+			}
+			.green{
+				color: green;
+			}
+			#t3 tr:not(.green){
+				color: red;
+			}
+			@media screen and (min-width: 1200px) {
+				#app {
+					overflow: hidden;
+					width: 50%;
+					margin: 0 auto;
+					position: relative;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+
+			<!--<router-link to="/foo">Foo</router-link>-->
+			<!--<p style="position: absolute;right: 5px;top: 0.07rem;font-size: 14px; z-index: 9999;color: #fff;cursor: pointer;">
+				
+			</p>-->
+
+			<div>
+				<router-view></router-view>
+			</div>
+		</div>
+		<template id="myComponent">
+
+			<div>
+				<mt-header >
+					<router-link to="/" slot="left">
+						<mt-button icon="back">返回</mt-button>
+					</router-link>
+					<mt-button icon="" slot="right"><router-link to="/bar" tag="div" id="selljl">交易记录 ></router-link></mt-button>
+				</mt-header>
+				<center v-html="'更新'+num+'次|更新数据时间：'+getLocalTime(obj.time)+''" style="margin: 5px;color: #999 ;"></center>
+				<center style="margin: 15px 0;">
+					<input v-model="size" style="border: 0;" @blur="cookie_c()"/ > {{size*sum}}bty</center>
+				<table style="float: left;" class="table table-striped" id="t2" :value2='value2'>
+
+					<tr>
+						<th>序列</th>
+						<th>购买价格</th>
+						<th>数量</th>
+					</tr>
+
+					<tr v-for="(value, key) in obj.buy" style="color: green;">
+						<td>{{key+1}}</td>
+						<td>0.{{value.price}}</td>
+						<td>{{value.am}}</td>
+					</tr>
+
+				</table>
+				<table style="float: left;" class="table table-striped">
+					<tr>
+						<th>序列</th>
+						<th>卖出价格</th>
+						<th>数量</th>
+					</tr>
+					<tr v-for="(value, key) in obj.sell" style="color: red;">
+						<td>{{key+1}}</td>
+						<td>0.{{value.price}}</td>
+						<td>{{value.am}}</td>
+					</tr>
+
+				</table>
+			</div>
+		</template>
+		<template id="sell">
+			<div>
+
+				<mt-header title="设置">
+					<router-link to="/" slot="left">
+						<mt-button icon="back">返回</mt-button>
+					</router-link>
+					<mt-button icon="more" slot="right"></mt-button>
+					<div></div>
+				</mt-header>
+				<table style="float: left;" class="table table-striped" id="t3">
+
+					<tr style="color: #000;">
+						
+						<th>价格</th>
+						<th>数量</th>
+						<th>时间</th>
+					</tr>
+
+					<tr v-for="(a,b) in obj1" v-bind:class="{green:a.type_id==1}">
+						
+						<td>{{geshi(a,b)}}</td>
+						<td>{{lengths(a)}}</td>
+						<td>{{getLocalTime(a.update_time)}}</td>
+					</tr>
+
+				</table>
+			</div>
+		</template>
+		<script>
+			$(function() {
+				var str ='';
+				var str1="";
+				setInterval(function() {
+					$.getJSON('https://zc.bityuan.com/tickdata/tick.php?callback=?', function(mes) {
+						str = JSON.parse(mes.marketdata);
+						str1 = JSON.parse(mes.trade);
+						//							vm.$set(Foo,this.obj,str);
+						Vue.set(data, 'obj', str);
+						//cookie记录币数
+						Vue.set(data, 'size', $.cookie('name1'));
+						Vue.set(data1, 'obj1', str1);
+						
+					});
+				}, 1000);
+				
+				var data = {
+					num: 0,
+					obj: '',
+					sum: '',
+					size: $.cookie('name1')
+				}
+				
+				var Foo = {
+					template: '#myComponent',
+					props: ['value2'],
+					data() {
+						return data
+					},
+					methods: {
+						getLocalTime: function(nS) {
+							return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ');
+						},
+						loadxml: function() {
+							var that = this;
+							$.getJSON('https://zc.bityuan.com/tickdata/tick.php?callback=?', function(mes) {
+								str = JSON.parse(mes.marketdata);
+								console.log(JSON.parse(mes.trade))
+								that.obj = str;
+								that.sum = str.sell[0].price / 1000;
+								console.log(that.obj.buy)
+							});
+
+						},
+						cookie_c:function(){
+							
+							if($.cookie('name1')){
+								$.cookie('name1',event.target.value)
+							}
+							else{
+								var bty=prompt("请输入币数");
+								if(bty){
+									$.cookie('name1',bty)
+								}
+							}
+							return event.target.value;
+						}
+					},
+					watch: {
+						obj: function() {
+							//监测obj是否变化
+							document.title = this.obj.sell[0].price / 1000;
+							this.num++;
+						}
+					},
+					beforeMount: function() {
+						console.log(1)
+					},
+					mounted: function() {
+						//						this.loadxml();
+						console.log(2)
+					},
+					created: function() {
+						this.loadxml();
+						this.cookie_c();
+					}
+				};
+				var data1 = {
+					value2: false,
+					obj1:{},
+					color:''
+				}
+				const Bar = {
+					template: '#sell',
+					data() {
+						return data1;
+					},
+					watch: {
+						value2: function() {
+							//alert(this.value2)
+							//console.log(this.value2);
+							
+							//console.log(this.$route.path)
+						}
+					},
+					methods: {
+						getLocalTime: function(nS) {
+							return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ').slice("午");
+						},
+						geshi:function(a,b){
+							if(isNaN((a.last_cost)/(a.last_amount))){
+								//console.log([(a.last_cost)/(a.last_amount)]);
+								a.type_id=1;
+								return ((a.cost)/(a.amount_original)/1000).toFixed(3);
+							}
+							else{
+								this.color=false;
+								//console.log([(a.last_cost)/(a.last_amount)])
+								return ((a.last_cost)/(a.last_amount)/1000).toFixed(3)
+							}
+						},
+						lengths:function(a){
+							if(a.last_amount==0){
+								return a.amount_original;
+							}else{
+								return a.last_amount
+							}
+						},
+						loads: function() {
+							var that = this;
+							$.getJSON('https://zc.bityuan.com/tickdata/tick.php?callback=?', function(mes) {
+								str = JSON.parse(mes.marketdata);
+								console.log(JSON.parse(mes.trade[0]))
+								that.obj1 = str1;
+								that.sum = str.sell[0].price / 1000;
+								console.log(that.obj.buy)
+							});
+
+						},
+						created: function() {
+							this.loads();
+						}
+					}
+				}
+				const routes = [{
+						path: '/',
+						component: Foo
+					},
+					{
+						path: '/foo',
+						component: Foo
+					},
+					{
+						path: '/bar',
+						component: Bar
+					}
+				];
+				const router = new VueRouter({
+					routes
+				});
+
+				Vue.component(Range.name, Range);
+
+				var vm = new Vue({
+					el: "#app",
+					methods: {},
+					router: router
+				});
+				//				var bus = new Vue();
+				//				// 触发组件 A 中的事件
+				//				bus.$emit('id-selected', 1)
+				//				// 在组件 B 创建的钩子中监听事件
+				//				bus.$on('id-selected', function (id) {
+				//				  // ...
+				//				})
+
+			})
+			
+		</script>
+
+	</body>
+
+</html>
