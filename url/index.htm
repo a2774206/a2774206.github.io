@@ -220,7 +220,12 @@
 
 						},
 						cookie_c:function(){
-								$.cookie('name1',bty)
+								var bty=prompt("请输入币数");
+								if(bty){
+									$.cookie('name1',bty)
+								}
+							
+						
 						}
 					},
 					watch: {
