@@ -114,7 +114,7 @@
 				</mt-header>
 				<center v-html="'更新'+num+'次|更新数据时间：'+getLocalTime(obj.time)+''" style="margin: 5px;color: #999 ;"></center>
 				<center style="margin: 15px 0;">
-					<input v-model="size" style="border: 0;" @blur="cookie_c()"/ > {{size*sum}}bty</center>
+					<input v-model="size" style="border: 0;" @click="cookie_c()"/ > {{size*sum}}bty</center>
 				<table style="float: left;" class="table table-striped" id="t2" :value2='value2'>
 
 					<tr>
