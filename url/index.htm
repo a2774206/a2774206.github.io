@@ -220,17 +220,12 @@
 
 						},
 						cookie_c:function(){
-							
-							if($.cookie('name1')){
-								$.cookie('name1',event.target.value)
-							}
-							else{
 								var bty=prompt("请输入币数");
 								if(bty){
 									$.cookie('name1',bty)
 								}
-							}
-							return event.target.value;
+							
+						
 						}
 					},
 					watch: {
@@ -241,15 +236,14 @@
 						}
 					},
 					beforeMount: function() {
-						console.log(1)
-					},
+						this.loadxml();
+						
+					}, 
 					mounted: function() {
-						//						this.loadxml();
-						console.log(2)
+						
 					},
 					created: function() {
-						this.loadxml();
-						this.cookie_c();
+						
 					}
 				};
 				var data1 = {
