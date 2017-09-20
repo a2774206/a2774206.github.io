@@ -37,9 +37,11 @@
 			h1 {
 				margin-bottom: 0.05rem;
 			}
-			.mint-header{
+			
+			.mint-header {
 				height: 0.5rem;
 			}
+			
 			table {
 				text-align: center;
 			}
@@ -71,15 +73,19 @@
 				margin-top: 20px;
 				margin-left: 10px;
 			}
-			td{
+			
+			td {
 				width: 5%;
 			}
-			.green{
+			
+			.green {
 				color: green;
 			}
-			#t3 tr:not(.green){
+			
+			#t3 tr:not(.green) {
 				color: red;
 			}
+			
 			@media screen and (min-width: 1200px) {
 				#app {
 					overflow: hidden;
@@ -106,15 +112,17 @@
 		<template id="myComponent">
 
 			<div>
-				<mt-header >
+				<mt-header>
 					<router-link to="/" slot="left">
-						<mt-button icon="back">返回</mt-button>
+						<mt-button icon="i" id="closetip">关闭提示</mt-button>
 					</router-link>
-					<mt-button icon="" slot="right"><router-link to="/bar" tag="div" id="selljl">交易记录 ></router-link></mt-button>
+					<mt-button icon="" slot="right">
+						<router-link to="/bar" tag="div" id="selljl">交易记录 ></router-link>
+					</mt-button>
 				</mt-header>
 				<center v-html="'更新'+num+'次|更新数据时间：'+getLocalTime(obj.time)+''" style="margin: 5px;color: #999 ;"></center>
 				<center style="margin: 15px 0;">
-					<input v-model="size" style="border: 0;" @click="cookie_c()"/ > {{size*sum}}bty</center>
+					<input v-model="size" style="border: 0;" @click="cookie_c()" /> {{size*sum}}bty</center>
 				<table style="float: left;" class="table table-striped" id="t2" :value2='value2'>
 
 					<tr>
@@ -158,14 +166,14 @@
 				<table style="float: left;" class="table table-striped" id="t3">
 
 					<tr style="color: #000;">
-						
+
 						<th>价格</th>
 						<th>数量</th>
 						<th>时间</th>
 					</tr>
 
 					<tr v-for="(a,b) in obj1" v-bind:class="{green:a.type_id==1}">
-						
+
 						<td>{{geshi(a,b)}}</td>
 						<td>{{lengths(a)}}</td>
 						<td>{{getLocalTime(a.update_time)}}</td>
@@ -176,166 +184,246 @@
 		</template>
 		<script>
 			$(function() {
-				var str ='';
-				var str1="";
-				setInterval(function() {
-					$.getJSON('https://zc.bityuan.com/tickdata/tick.php?callback=?', function(mes) {
-						str = JSON.parse(mes.marketdata);
-						str1 = JSON.parse(mes.trade);
-						//							vm.$set(Foo,this.obj,str);
-						Vue.set(data, 'obj', str);
-						//cookie记录币数
-						Vue.set(data, 'size', $.cookie('name1'));
-						Vue.set(data1, 'obj1', str1);
-						
-					});
-				}, 1000);
-				
-				var data = {
-					num: 0,
-					obj: '',
-					sum: '',
-					size: $.cookie('name1')
-				}
-				
-				var Foo = {
-					template: '#myComponent',
-					props: ['value2'],
-					data() {
-						return data
-					},
-					methods: {
-						getLocalTime: function(nS) {
-							return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ');
-						},
-						loadxml: function() {
-							var that = this;
-							$.getJSON('https://zc.bityuan.com/tickdata/tick.php?callback=?', function(mes) {
-								str = JSON.parse(mes.marketdata);
-								console.log(JSON.parse(mes.trade))
-								that.obj = str;
-								that.sum = str.sell[0].price / 1000;
-								console.log(that.obj.buy)
-							});
+			var str = '';
+			var str1 = "";
+			setInterval(function() {
+				$.getJSON('https://zc.bityuan.com/tickdata/tick.php?callback=?', function(mes) {
+					str = JSON.parse(mes.marketdata);
+					str1 = JSON.parse(mes.trade);
+					//							vm.$set(Foo,this.obj,str);
+					Vue.set(data, 'obj', str);
+					//cookie记录币数
+					Vue.set(data, 'size', $.cookie('name1'));
+					Vue.set(data1, 'obj1', str1);
 
-						},
-						cookie_c:function(){
-								var bty=prompt("请输入币数");
-								if(bty){
-									$.cookie('name1',bty)
-								}
-							
-						
+				});
+			}, 1000);
+
+			var data = {
+				num: 0,
+				obj: '',
+				sum: '',
+				size: $.cookie('name1')
+			}
+
+			var Foo = {
+				template: '#myComponent',
+				props: ['value2'],
+				data() {
+					return data
+				},
+				methods: {
+					getLocalTime: function(nS) {
+						return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ');
+					},
+					loadxml: function() {
+						var that = this;
+						$.getJSON('https://zc.bityuan.com/tickdata/tick.php?callback=?', function(mes) {
+							str = JSON.parse(mes.marketdata);
+							console.log(JSON.parse(mes.trade))
+							that.obj = str;
+							that.sum = str.sell[0].price / 1000;
+							console.log(that.obj.buy)
+						});
+
+					},
+					cookie_c: function() {
+						var bty = prompt("请输入币数");
+						if(bty) {
+							$.cookie('name1', bty)
+						}
+
+					}
+				},
+				watch: {
+					obj: function() {
+						//监测obj是否变化
+						document.title = this.obj.sell[0].price / 1000;
+						this.num++;
+					}
+				},
+				beforeMount: function() {
+					this.loadxml();
+
+				},
+				mounted: function() {
+
+				},
+				created: function() {
+
+				}
+			};
+			var data1 = {
+				value2: false,
+				obj1: {},
+				color: ''
+			}
+			const Bar = {
+				template: '#sell',
+				data() {
+					return data1;
+				},
+				watch: {
+					value2: function() {
+						//alert(this.value2)
+						//console.log(this.value2);
+
+						//console.log(this.$route.path)
+					}
+				},
+				methods: {
+					getLocalTime: function(nS) {
+						return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ').slice("午");
+					},
+					geshi: function(a, b) {
+						if(isNaN((a.last_cost) / (a.last_amount))) {
+							//console.log([(a.last_cost)/(a.last_amount)]);
+							//a.type_id=1;
+							return((a.cost) / (a.amount_original) / 1000).toFixed(3);
+						} else {
+							this.color = false;
+							//console.log([(a.last_cost)/(a.last_amount)])
+							return((a.last_cost) / (a.last_amount) / 1000).toFixed(3)
 						}
 					},
-					watch: {
-						obj: function() {
-							//监测obj是否变化
-							document.title = this.obj.sell[0].price / 1000;
-							this.num++;
+					lengths: function(a) {
+						if(a.last_amount == 0) {
+							return a.amount_original;
+						} else {
+							return a.last_amount
 						}
 					},
-					beforeMount: function() {
-						this.loadxml();
-						
-					}, 
-					mounted: function() {
-						
+					loads: function() {
+						var that = this;
+						$.getJSON('https://zc.bityuan.com/tickdata/tick.php?callback=?', function(mes) {
+							str = JSON.parse(mes.marketdata);
+							console.log(JSON.parse(mes.trade[0]))
+							that.obj1 = str1;
+							that.sum = str.sell[0].price / 1000;
+							console.log(that.obj.buy)
+						});
+
 					},
 					created: function() {
-						
-					}
-				};
-				var data1 = {
-					value2: false,
-					obj1:{},
-					color:''
-				}
-				const Bar = {
-					template: '#sell',
-					data() {
-						return data1;
-					},
-					watch: {
-						value2: function() {
-							//alert(this.value2)
-							//console.log(this.value2);
-							
-							//console.log(this.$route.path)
-						}
-					},
-					methods: {
-						getLocalTime: function(nS) {
-							return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ').slice("午");
-						},
-						geshi:function(a,b){
-							if(isNaN((a.last_cost)/(a.last_amount))){
-								//console.log([(a.last_cost)/(a.last_amount)]);
-								a.type_id=1;
-								return ((a.cost)/(a.amount_original)/1000).toFixed(3);
-							}
-							else{
-								this.color=false;
-								//console.log([(a.last_cost)/(a.last_amount)])
-								return ((a.last_cost)/(a.last_amount)/1000).toFixed(3)
-							}
-						},
-						lengths:function(a){
-							if(a.last_amount==0){
-								return a.amount_original;
-							}else{
-								return a.last_amount
-							}
-						},
-						loads: function() {
-							var that = this;
-							$.getJSON('https://zc.bityuan.com/tickdata/tick.php?callback=?', function(mes) {
-								str = JSON.parse(mes.marketdata);
-								console.log(JSON.parse(mes.trade[0]))
-								that.obj1 = str1;
-								that.sum = str.sell[0].price / 1000;
-								console.log(that.obj.buy)
-							});
-
-						},
-						created: function() {
-							this.loads();
-						}
+						this.loads();
 					}
 				}
-				const routes = [{
-						path: '/',
-						component: Foo
-					},
-					{
-						path: '/foo',
-						component: Foo
-					},
-					{
-						path: '/bar',
-						component: Bar
+			}
+			const routes = [{
+					path: '/',
+					component: Foo
+				},
+				{
+					path: '/foo',
+					component: Foo
+				},
+				{
+					path: '/bar',
+					component: Bar
+				}
+			];
+			const router = new VueRouter({
+				routes
+			});
+
+			Vue.component(Range.name, Range);
+
+			var vm = new Vue({
+				el: "#app",
+				methods: {},
+				router: router
+			});
+			var timer = null,
+				title = $('title').text();
+
+			setInterval(function(){
+				showMsgNotification('bty最新卖价：0.'+str.sell[0].price+"\n去交易>>");
+				
+				return false;
+			},2000)
+
+			$('body').on('click', function() {
+				clearInterval(timer);
+				$('title').text(title);
+			});
+			$("#closetip").on('click', function() {
+				showMsgNotification=function(){
+					return false
+				}
+			});
+			function showMsgNotification(title, msg) {
+				var Notification = window.Notification || window.mozNotification || window.webkitNotification;
+
+				if(Notification) { //支持桌面通知
+					if(Notification.permission == "granted") { //已经允许通知
+						var instance = new Notification(title, {
+							body: msg,
+							icon: "https://www.bityuan.com/img/gignlogo.png",
+						});
+
+						setTimeout(function(){
+							instance.close();
+						},3000)
+						instance.onclick=function(){
+							window.location.href="http://www.bityuan.com";
+							instance.close();
+						}
+						instance.onerror = function() {
+							console.log('onerror');
+						};
+						instance.onshow = function() {
+							console.log('onshow');
+						};
+						instance.onclose = function() {
+							console.log('onclose');
+						};
+					} else { //第一次询问或已经禁止通知(如果用户之前已经禁止显示通知，那么浏览器不会再次询问用户的意见，Notification.requestPermission()方法无效)
+						Notification.requestPermission(function(status) {
+							if(status === "granted") { //用户允许
+								var instance = new Notification(title, {
+									body: msg,
+									icon: "images/reload.png"
+								});
+
+								instance.onclick = function() {
+									// Something to do
+								};
+								instance.onerror = function() {
+									// Something to do
+								};
+								instance.onshow = function() {
+									// Something to do
+								};
+								instance.onclose = function() {
+									// Something to do
+								};
+							} else { //用户禁止
+								return false
+							}
+						});
 					}
-				];
-				const router = new VueRouter({
-					routes
-				});
+				} else { //不支持(IE等)
+					var index = 0;
 
-				Vue.component(Range.name, Range);
+					clearInterval(timer);
+					timer = setInterval(function() {
+						if(index % 2) {
+							$('title').text('【　　　】' + title); //这里是中文全角空格，其他不行
+						} else {
+							$('title').text('【新消息】' + title);
+						}
+						index++;
 
-				var vm = new Vue({
-					el: "#app",
-					methods: {},
-					router: router
-				});
-				//				var bus = new Vue();
-				//				// 触发组件 A 中的事件
-				//				bus.$emit('id-selected', 1)
-				//				// 在组件 B 创建的钩子中监听事件
-				//				bus.$on('id-selected', function (id) {
-				//				  // ...
-				//				})
+						if(index > 20) {
+							clearInterval(timer);
+						}
+					}, 500);
+				}
 
-			})
+			}
+
+			});
+
 			
 		</script>
 
