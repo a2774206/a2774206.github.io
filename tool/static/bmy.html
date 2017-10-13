@@ -4,73 +4,12 @@
 		<meta charset="UTF-8">
 		<title>斑马鱼</title>
 		<style>
-			body{
-				user-select:none;
-				webkit-user-select:none;
-			}
-
-			*{
-				margin: 0;
-				padding: 0;
-				border: 0;
-			}
-			
-			p{
-				width: 100%;
-				display: block;
-			    -webkit-margin-before: 0em;
-			    -webkit-margin-after: 0em;
-			    -webkit-margin-start: 0px;
-			    -webkit-margin-end: 0px;
-			    overflow: hidden;
-			}
-			p img{
-				width: 100%;
-				height: auto;
-				vertical-align:bottom;
-			}
 			
 
 		</style>
-		<script>
-			function preloadimages(arr){
-			    var newimages=[];
-			    var arr=[];
-			    for (var i=0; i<arr.length; i++){
-			        newimages[i]=new Image()
-			        newimages[i].src="../advert_img/"+arr[i]
-			    }
-			}
-			preloadimages(['3_031.jpg', '3_02.jpg', '3_03.jpg']);
-		</script>
+		
 	</head>
 	<body oncontextmenu="return false">
-		<p>
-			<img src="../advert_img/3_01.jpg"  onload="if(Error){console.log(error)}"/>
-		</p>
-		<p>
-			<img src="../advert_img/3_02.jpg" />
-		</p>
-		<p>
-			<img src="../advert_img/3_03.jpg" />
-		</p>
-		<script>
-//			function preloadimages(arr){
-//			    var newimages=[]
-//			    var arr=(typeof arr!="object")? [arr] : arr  //确保参数总是数组
-//			    for (var i=0; i<arr.length; i++){
-//			        newimages[i]=new Image()
-//			        newimages[i].src="http://www.bjxxw.com/advert_img/"+arr[i]
-//			    }
-//			}
-			//preloadimages(['3_031.jpg', '3_02.jpg', '3_03.jpg'])
-			if(document.all){
-			       document.onselectstart= function(){return false;}; //for ie
-			  }else{
-			       document.onmousedown= function(){return false;};
-			       document.onmouseup= function(){return true;};
-			 }
-			 document.onselectstart = new Function('event.returnValue=false;');
-		</script>
+		<a href="alipays://platformapi/startapp?appId=20000001">打开支付宝</a>
 	</body>
 </html>
