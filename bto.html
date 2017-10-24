@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="js/webuploader.css" />
+		<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script type="text/javascript" src="js/webuploader.js"></script>
+
+	</head>
+
+	<body>
+		
+
+		<script>
+			var str = '谁是小可爱？？';
+			var name = "段成琦";
+			wait();
+			function wait(){
+				var istrue = prompt(str,"");
+				if(istrue==name){
+					alert("没错！名字后面加个“！”号吧");
+					ans_error();
+				}else{
+					alert(istrue+"不是小可爱！");
+					wait();
+				}
+			}
+			function ans_error(){
+				var ans_true = prompt(str,"");
+				if(ans_true==name+"!"||ans_true==name+"！"){
+					alert(ans_true+"! 真是个小可爱");
+					
+					return true;
+				}else{
+					alert("不对哦，再来一次")
+					ans_error();
+				}
+			}
+			
+			
+
+		</script>
+	</body>
+
+</html>
