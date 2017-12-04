@@ -88,7 +88,12 @@
 			#t3 tr:not(.green) {
 				color: red;
 			}
-			
+			.span2{
+				color: #C3C6CC;display: inline-block;width: 37px;white-space : normal nowrap ;overflow: hidden;
+			}
+			.span1{
+				display: inline-block;vertical-align: inherit;
+			}
 			@media screen and (min-width: 1200px) {
 				#app {
 					overflow: hidden;
@@ -156,7 +161,9 @@
 
 					<tr v-for="(value, key) in obj.buy" style="color:red;">
 						<td>{{key+1}}</td>
-						<td>{{value.price}}</td>
+						<td>
+							<span class="span1">{{value.price}}</span>
+							<span class="span2">￥{{value.price*6.6137}}</span></td>
 						<td>{{value.am}}</td>
 					</tr>
 
@@ -169,7 +176,10 @@
 					</tr>
 					<tr v-for="(value, key) in obj.sell" style="color:green;">
 						<td>{{key+1}}</td>
-						<td>{{value.price}}</td>
+						<td>
+							<span class="span1">{{value.price}}</span>
+							<span class="span2">￥{{value.price*6.6137}}</span>
+						</td>
 						<td>{{value.am}}</td>
 					</tr>
 
