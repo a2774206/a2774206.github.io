@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
- 
+
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -11,9 +11,7 @@
 		<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 		<script type="text/javascript" src="https://cdn.bootcss.com/vue/2.3.4/vue.js"></script>
 		<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
-
 		<!-- 引入组件库 -->
-
 		<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
 		<script type="text/javascript">
 			document.addEventListener('plusready', function() {
@@ -25,49 +23,38 @@
 			html {
 				font-size: 100px;
 			}
-			
 			body {
 				font-size: 0.16rem;
 			}
-			
 			#app {
 				overflow: hidden;
 			}
-			
 			h1 {
 				margin-bottom: 0.05rem;
 			}
-			
 			.mint-header {
 				height: 0.5rem;
 			}
-			
 			table {
 				text-align: center;
 			}
-			
 			.table td,
 			.table th {
 				padding: 0.075rem
 			}
-			
 			.table {
 				margin-bottom: 0.1rem;
 			}
-			
 			label {
 				display: inline-block;
 				margin-bottom: 0.05rem;
 			}
-			
 			th {
 				text-align: center;
 			}
-			
 			.mint-header {
 				text-align: center !important;
 			}
-			
 			.mint-switch {
 				font-size: 14px;
 				margin-top: 20px;
@@ -110,7 +97,6 @@
 
 	<body>
 		<div id="app">
-
 			<!--<router-link to="/foo">Foo</router-link>-->
 			<!--<p style="position: absolute;right: 5px;top: 0.07rem;font-size: 14px; z-index: 9999;color: #fff;cursor: pointer;">
 				
@@ -118,14 +104,14 @@
 
 			<div>
 				<router-view></router-view>
-			</div> 
+			</div>
 		</div>
 		<template id="myComponent">
 
 			<div>
 				<mt-header>
 					<router-link to="/" slot="left">
-						<mt-button icon="i" id="closetip">关闭提示</mt-button>
+						<mt-button icon="i" id="closetip">{{tip}}</mt-button>
 					</router-link>
 					<mt-button icon="" slot="right">
 						<router-link to="/bar" tag="div" id="selljl">交易记录 ></router-link>
@@ -171,7 +157,7 @@
 				<table style="float: left;" class="table table-striped">
 					<tr>
 						<th>序列</th>
-						<th>卖出价格</th>
+						<th>卖出价格</th> 
 						<th>数量</th>
 					</tr>
 					<tr v-for="(value, key) in obj.sell" style="color:green;">
@@ -220,9 +206,10 @@
 				var str = '';
 				var str1 = "";
 				var type1= '';
-				var url = window.sessionStorage.getItem("url");
+				var ks;
+				var url = window.localStorage.getItem("url");
 					if(url!='undefined'){
-						window.sessionStorage.setItem("url",url);
+						window.localStorage.setItem("url",url);
 					}else{
 						
 					}
@@ -230,7 +217,7 @@
 				$(document).on('change','#select',function(){
 					url =$('select').val();
 					if(url!='undefined'){
-						window.sessionStorage.setItem("url",url);
+						window.localStorage.setItem("url",url);
 					}
 					if(url!='BTYUSDT'){
 						//暂时先给bty转美元
@@ -241,17 +228,26 @@
 					
 				})
 				setInterval(function() {
-					$.getJSON('https://api.zhaobi.com/api/data/market?num=8&symbol='+window.sessionStorage.getItem("url"), function(mes) {
+					$.getJSON('https://api.zhaobi.com/api/data/market?num=8&symbol='+window.localStorage.getItem("url"), function(mes) {
 						str = mes.data.marketdata;
 						str1 = mes.data.trade;
 						type1 = mes.data.symbol;
 						Vue.set(data, 'type', type1);
 						console.log(data)
 						Vue.set(data, 'obj', str);
+						$("#closetip").off().on('click', function() {
+							if(data.tip=='关闭提示'){
+								clearInterval(ks);
+								Vue.set(data, 'tip', '开启提示');
+							}else{
+								Vue.set(data, 'tip', '关闭提示');
+								window.location.reload()
+							}
+						});
+						
 						//cookie记录币数
 						Vue.set(data, 'size', $.cookie('name1'));
 						Vue.set(data1, 'obj1', str1);
-
 					});
 				}, 1000);
 
@@ -262,7 +258,8 @@
 					sum: '',
 					icotype:url,
 					size: $.cookie('name1'),
-					url1:window.sessionStorage.getItem("url")
+					url1:window.localStorage.getItem("url"),
+					tip:'关闭提示'
 				}
 
 				var Foo = {
@@ -299,7 +296,7 @@
 					watch: {
 						obj: function() {
 							//监测obj是否变化
-							document.title = sessionStorage.getItem('url')+'最新售价'+this.obj.sell[0].price;
+							document.title = localStorage.getItem('url')+'最新售价'+this.obj.sell[0].price;
 							this.num++;
 						}
 					},
@@ -350,7 +347,7 @@
 						},
 						loads: function() {
 							var that = this;
-							$.getJSON('https://api.zhaobi.com/api/data/market?num=8&symbol='+window.sessionStorage.getItem(url), function(mes) {
+							$.getJSON('https://api.zhaobi.com/api/data/market?num=8&symbol='+window.localStorage.getItem(url), function(mes) {
 								str = mes.data.marketdata;
 								console.log(mes.data.trade[0])
 								that.obj1 = str1;
@@ -391,21 +388,16 @@
 				var timer = null,
 					title = $('title').text();
 
-//				setInterval(function() {
-//					showMsgNotification('bty最新卖价：0.' + str.sell[0].price + "\n去交易>>");
-//
-//					return false;
-//				}, 2000)
+				ks = setInterval(function() {
+					showMsgNotification(localStorage.getItem('url')+'最新卖价：' + (str.sell[0].price*6.6137) + "\n去交易>>");
+					return false;
+				}, 20000)
 
 				$('body').on('click', function() {
 					clearInterval(timer);
 					$('title').text(title);
 				});
-				$("#closetip").on('click', function() {
-					showMsgNotification = function() {
-						return false
-					}
-				});
+				
 
 				function showMsgNotification(title, msg) {
 					var Notification = window.Notification || window.mozNotification || window.webkitNotification;
@@ -421,7 +413,7 @@
 								instance.close();
 							}, 3000)
 							instance.onclick = function() {
-								window.location.href = "http://www.bityuan.com";
+								window.location.href = "http://www.zhaobi.com";
 								instance.close();
 							}
 							instance.onerror = function() {
@@ -478,6 +470,8 @@
 					}
 
 				}
+				
+				
 
 			});
 		</script>
