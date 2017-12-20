@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
- 
+
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -76,7 +76,7 @@
 				color: red;
 			}
 			.span2{
-				color: #C3C6CC;display: inline-block;width: 54px;white-space : normal nowrap ;overflow: hidden;
+				color: #C3C6CC;display: inline-block;white-space : normal nowrap ;overflow: hidden;
 			}
 			.span1{
 				display: inline-block;vertical-align: inherit;
@@ -149,7 +149,7 @@
 						<td>{{key+1}}</td>
 						<td>
 							<span class="span1">{{value.price}}</span>
-							<span class="span2">￥{{value.price*6.6137}}</span></td>
+							<span class="span2">￥{{value.price*6.6137|conversion}}</span></td>
 						<td>{{value.am}}</td>
 					</tr>
 
@@ -164,7 +164,7 @@
 						<td>{{key+1}}</td>
 						<td>
 							<span class="span1">{{value.price}}</span>
-							<span class="span2">￥{{value.price*6.6137}}</span>
+							<span class="span2">￥{{value.price*6.6137|conversion}}</span>
 						</td>
 						<td>{{value.am}}</td>
 					</tr>
@@ -210,8 +210,6 @@
 				var url = window.localStorage.getItem("url");
 					if(url!='undefined'){
 						window.localStorage.setItem("url",url);
-					}else{
-						
 					}
 				
 				$(document).on('change','#select',function(){
@@ -219,13 +217,6 @@
 					if(url!='undefined'){
 						window.localStorage.setItem("url",url);
 					}
-					if(url!='BTYUSDT'){
-						//暂时先给bty转美元
-						$('.span2').hide()
-					}else{
-						$('.span2').show()
-					}
-					
 				})
 				setInterval(function() {
 					$.getJSON('https://api.zhaobi.com/api/data/market?num=8&symbol='+window.localStorage.getItem("url"), function(mes) {
@@ -269,9 +260,6 @@
 						return data
 					},
 					methods: {
-						getLocalTime: function(nS) {
-							
-						},
 						loadxml: function() {
 							var that = this;
 							url ='https://api.zhaobi.com/api/data/market?num=8&symbol='+that.url1;
@@ -290,7 +278,12 @@
 							if(bty) {
 								$.cookie('name1', bty)
 							}
-
+						}
+					},
+					filters:{
+						//过滤器美元换算保留三位小数
+						conversion:function(value){
+							return value.toFixed(3);
 						}
 					},
 					watch: {
@@ -302,13 +295,6 @@
 					},
 					beforeMount: function() {
 						this.loadxml();
-
-					},
-					mounted: function() {
-
-					},
-					created: function() {
-
 					}
 				};
 				var data1 = {
@@ -434,18 +420,9 @@
 									});
 
 									instance.onclick = function() {
-										// Something to do
+										
 									};
-									instance.onerror = function() {
-										// Something to do
 									
-									};
-									instance.onshow = function() {
-										// Something to do
-									};
-									instance.onclose = function() {
-										// Something to do
-									};
 								} else { //用户禁止
 									return false
 								}
