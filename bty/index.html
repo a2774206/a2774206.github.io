@@ -219,7 +219,7 @@
 					}
 				})
 				setInterval(function() {
-					$.getJSON('https://api.zhaobi.com/api/data/market?num=8&symbol='+window.localStorage.getItem("url"), function(mes) {
+					$.getJSON('https://api.zhaobi.com/api/data/market?num=100&symbol='+window.localStorage.getItem("url"), function(mes) {
 						str = mes.data.marketdata;
 						str1 = mes.data.trade;
 						type1 = mes.data.symbol;
@@ -262,7 +262,7 @@
 					methods: {
 						loadxml: function() {
 							var that = this;
-							url ='https://api.zhaobi.com/api/data/market?num=8&symbol='+that.url1;
+							url ='https://api.zhaobi.com/api/data/market?num=100&symbol='+that.url1;
 							$.getJSON(url, function(mes) {
 								str = mes.data.marketdata;
 								console.log(mes.data.trade)
@@ -333,7 +333,7 @@
 						},
 						loads: function() {
 							var that = this;
-							$.getJSON('https://api.zhaobi.com/api/data/market?num=8&symbol='+window.localStorage.getItem(url), function(mes) {
+							$.getJSON('https://api.zhaobi.com/api/data/market?num=100&symbol='+window.localStorage.getItem(url), function(mes) {
 								str = mes.data.marketdata;
 								console.log(mes.data.trade[0])
 								that.obj1 = str1;
