@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<title></title> 
+		<title></title>
 		<link href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
 		<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -292,14 +292,14 @@
 					computed:{
 						buysum:function(){
 							var s = 0;
-							for(var i = 0; i<(this.obj.buy).length;i++){
+							for(var i in this.obj.buy){
 								s+=+(this.obj.buy[i].am);
 							}
 							 return s.toFixed(2);
 						},
 						sellsum:function(){
 							var s = 0;
-							for(var i = 0; i<this.obj.sell.length;i++){
+							for(var i in this.obj.sell){
 								s+=+(this.obj.sell[i].am);
 							}
 							 return s.toFixed(2);
