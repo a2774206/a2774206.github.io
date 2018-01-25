@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
- 
+
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -22,77 +22,10 @@
 		<style>
 			html {
 				font-size: 100px;
-			}		<script>
-		function showMsgNotification(title, msg) {
-					var Notification = window.Notification || window.mozNotification || window.webkitNotification;
-
-					if(Notification) { //支持桌面通知
-						if(Notification.permission == "granted") { //已经允许通知
-							var instance = new Notification(title, {
-								body: msg,
-								icon: "https://www.bityuan.com/img/gignlogo.png",
-							});
-
-							setTimeout(function() {
-								instance.close();
-							}, 3000)
-							instance.onclick = function() {
-								window.location.href = "http://www.zhaobi.com";
-								instance.close();
-							}
-							instance.onerror = function() {
-								console.log('onerror');
-							};
-							instance.onshow = function() {
-								console.log('onshow');
-							};
-							instance.onclose = function() {
-								console.log('onclose');
-							};
-						} else { //第一次询问或已经禁止通知(如果用户之前已经禁止显示通知，那么浏览器不会再次询问用户的意见，Notification.requestPermission()方法无效)
-							Notification.requestPermission(function(status) {
-								if(status === "granted") { //用户允许
-									var instance = new Notification(title, {
-										body: msg,
-										icon: "images/reload.png"
-									});
-//									$(".market").eq(1).find(".clolor").html()
-									
-								} else { //用户禁止
-									return false;
-								}
-							});
-						}
-					} else { //不支持(IE等)
-						var index = 0;
-
-						clearInterval(timer);
-						timer = setInterval(function() {
-							if(index % 2) {
-								$('title').text('【　　　】' + title); //这里是中文全角空格，其他不行
-							} else {
-								$('title').text('【新消息】' + title);
-							}
-							index++;
-
-							if(index > 20) {
-								clearInterval(timer);
-							}
-						}, 500);
-					}
-
-				}
-		
-		
-		$(function(){
-			setInterval(function(){
-				showMsgNotification('bty最新价：' + $(".lone:contains('最新价')").next(".clolor").html() + "\n去交易>>");
-			},20000)
-		})
-		</script>
+			}
 			body {
 				font-size: 0.16rem;
-			} 
+			}
 			#app {
 				overflow: hidden;
 			}
@@ -192,6 +125,7 @@
 							<option>ETHBTC</option>
 							<option>ETCBTC</option>
 							<option>ZECBTC</option>
+							<option>SCUSDT</option>
 							<option>BTCUSDT</option>
 							<option>BCCUSDT</option>
 							<option>ZECUSDT</option>
@@ -199,24 +133,25 @@
 							<option>ETHUSDT</option>
 							<option>ETCUSDT</option>
 							<option>BTYUSDT</option>
-						</select></p>
-					<p>交易币种{{type}}<span style="display: none;">{{icotype}}</span></p>
+						</select>
+						显示档数<input type="number" v-model="urllink" maxlength="3" max="100" style="width: 3em;text-align: center;height: 1.5em;border:1px solid #C3C6CC" /></p>
+					<p style="display: none;">交易币种{{type}}<span style="display: none;">{{icotype}}</span></p>
+					<p></p>
 				</center>
-				<center style="margin: 15px 0;display: none;">
-					<input v-model="size" style="border: 0;" @click="cookie_c()" /> {{size*sum}}bty</center>
+				
 				<table style="float: left;" class="table table-striped" id="t2" :value2='value2'>
 
 					<tr>
 						<th>序列</th>
 						<th>购买价格</th>
-						<th>数量</th>
+						<th>数量{{buysum}}</th>
 					</tr>
 
 					<tr v-for="(value, key) in obj.buy" style="color:red;">
 						<td>{{key+1}}</td>
 						<td>
-							<span class="span1">{{value.price}}</span>
-							<span class="span2">￥{{value.price*6.6137|conversion}}</span></td>
+							<b class="span1">{{value.price}}</b>
+							<b class="span2">￥{{value.price*6.6137|conversion}}</b></td>
 						<td>{{value.am}}</td>
 					</tr>
 
@@ -225,13 +160,13 @@
 					<tr>
 						<th>序列</th>
 						<th>卖出价格</th> 
-						<th>数量</th>
+						<th>数量{{sellsum}}</th>
 					</tr>
 					<tr v-for="(value, key) in obj.sell" style="color:green;">
 						<td>{{key+1}}</td>
 						<td>
-							<span class="span1">{{value.price}}</span>
-							<span class="span2">￥{{value.price*6.6137|conversion}}</span>
+							<b class="span1">{{value.price}}</b>
+							<b class="span2">￥{{value.price*6.6137|conversion}}</b>
 						</td>
 						<td>{{value.am}}</td>
 					</tr>
@@ -286,7 +221,7 @@
 					}
 				})
 				setInterval(function() {
-					$.getJSON('https://api.zhaobi.com/api/data/market?num=100&symbol='+window.localStorage.getItem("url"), function(mes) {
+					$.getJSON('https://api.zhaobi.com/api/data/market?num='+data.urllink+'&symbol='+window.localStorage.getItem("url"), function(mes) {
 						str = mes.data.marketdata;
 						str1 = mes.data.trade;
 						type1 = mes.data.symbol;
@@ -315,6 +250,7 @@
 					obj: '',
 					sum: '',
 					icotype:url,
+					urllink:8,
 					size: $.cookie('name1'),
 					url1:window.localStorage.getItem("url"),
 					tip:'关闭提示'
@@ -329,7 +265,7 @@
 					methods: {
 						loadxml: function() {
 							var that = this;
-							url ='https://api.zhaobi.com/api/data/market?num=100&symbol='+that.url1;
+							url ='https://api.zhaobi.com/api/data/market?num='+this.urllink+'&symbol='+that.url1;
 							$.getJSON(url, function(mes) {
 								str = mes.data.marketdata;
 								console.log(mes.data.trade)
@@ -351,6 +287,22 @@
 						//过滤器美元换算保留三位小数
 						conversion:function(value){
 							return value.toFixed(3);
+						}
+					},
+					computed:{
+						buysum:function(){
+							var s = 0;
+							for(var i = 0; i<(this.obj.buy).length;i++){
+								s+=+(this.obj.buy[i].am);
+							}
+							 return s.toFixed(2);
+						},
+						sellsum:function(){
+							var s = 0;
+							for(var i = 0; i<this.obj.sell.length;i++){
+								s+=+(this.obj.sell[i].am);
+							}
+							 return s.toFixed(2);
 						}
 					},
 					watch: {
@@ -376,10 +328,7 @@
 					},
 					watch: {
 						value2: function() {
-							//alert(this.value2)
-							//console.log(this.value2);
-
-							//console.log(this.$route.path)
+							
 						}
 					},
 					methods: {
@@ -400,12 +349,11 @@
 						},
 						loads: function() {
 							var that = this;
-							$.getJSON('https://api.zhaobi.com/api/data/market?num=100&symbol='+window.localStorage.getItem(url), function(mes) {
+							$.getJSON('https://api.zhaobi.com/api/data/market?num='+this.urllink+'&symbol='+window.localStorage.getItem(url), function(mes) {
 								str = mes.data.marketdata;
-								console.log(mes.data.trade[0])
 								that.obj1 = str1;
 								that.sum = str.sell[0].price;
-								console.log(that.obj.buy)
+								
 							});
 
 						},
