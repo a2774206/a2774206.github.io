@@ -77,7 +77,7 @@
 				ri = now.getDate();
 			}
 			now_time = now.getFullYear()+"-"+yue+"-"+ri;
-			setInterval(function() {
+			var getdata = function(){
 				$.ajax({
 					type: "get",
 					url: "http://vip.progr.cn/bishijie.php",
@@ -95,7 +95,10 @@
 						vm.$data.textobjone = mes.data[eval("'" + now_time + "'")].buttom[0].content;
 
 					}
-				});
+				});	
+			}
+			setInterval(function() {
+				getdata()
 			}, 1000);
 
 			function showMsgNotification(title, msg) {
@@ -165,7 +168,7 @@
 					}
 				},
 				created: function() {
-
+					getdata();
 				},
 				methods: function() {
 
