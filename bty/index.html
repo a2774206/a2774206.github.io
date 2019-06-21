@@ -151,7 +151,7 @@
 						<td>{{key+1}}</td>
 						<td>
 							<b class="span1">{{value.price}}</b>
-							<b class="span2">￥{{value.price*6.6137|conversion}}</b></td>
+							<b class="span2">￥{{value.price*6.8723|conversion}}</b></td>
 						<td>{{value.am}}</td>
 					</tr>
 
@@ -166,7 +166,7 @@
 						<td>{{key+1}}</td>
 						<td>
 							<b class="span1">{{value.price}}</b>
-							<b class="span2">￥{{value.price*6.6137|conversion}}</b>
+							<b class="span2">￥{{value.price*6.8723|conversion}}</b>
 						</td>
 						<td>{{value.am}}</td>
 					</tr>
@@ -390,7 +390,7 @@
 					title = $('title').text();
 
 				ks = setInterval(function() {
-					showMsgNotification(localStorage.getItem('url')+'最新卖价：' + (str.sell[0].price*6.6137) + "\n去交易>>");
+					showMsgNotification(localStorage.getItem('url')+'最新卖价：' + (str.sell[0].price*6.8723) + "\n去交易>>");
 					return false;
 				}, 20000)
 
