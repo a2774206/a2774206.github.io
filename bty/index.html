@@ -221,7 +221,7 @@
 					}
 				})
 				setInterval(function() {
-					$.getJSON('https://api.zhaobi.com/api/data/market?num='+data.urllink+'&symbol='+window.localStorage.getItem("url"), function(mes) {
+					$.getJSON('https://api.biqianbao.top/api/data/market?num='+data.urllink+'&symbol='+window.localStorage.getItem("url"), function(mes) {
 						str = mes.data.marketdata;
 						str1 = mes.data.trade;
 						type1 = mes.data.symbol;
